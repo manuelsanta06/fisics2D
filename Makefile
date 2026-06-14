@@ -3,7 +3,7 @@ CXXFLAGS?=-O2
 CXXFLAGS+=-Wall -Wextra -Isrc
 LDFLAGS ?= -lraylib -ltbb
 
-SRCS=example.cpp src/engine.cpp
+SRCS=example.cpp src/engine.cpp src/physicObjects.cpp
 OBJS=$(SRCS:src/%.cpp=build/%.o)
 TARGET=build/prueba
 

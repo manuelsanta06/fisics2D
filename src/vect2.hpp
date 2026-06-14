@@ -88,4 +88,8 @@ struct vector2{
   T mag()const{
     return std::sqrt(magSq());
   }
+
+  vector2 perp() const{
+    return vector2(-y,x);
+  }
 };

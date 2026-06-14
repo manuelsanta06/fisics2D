@@ -1,38 +1,20 @@
-#ifndef ENGINED
-#define ENGINED
+#pragma once
 
 #include <vector>
 #include <memory>
 #include "vect2.hpp"
+#include "physicObjects.hpp"
 
-class FisicObject{
-public:
-  virtual ~FisicObject()=default;
-  virtual void update(float dt)=0;
-
-  vector2<float> pos;
-  vector2<float> vel;
-  vector2<float> rotVel;
-  float mas;
-};
-
-class Circle:public FisicObject{
-public:
-  float radius;
-  void update(float dt)override;
-};
+const vector2<float> gravity(0.0f,980.0f);
 
 class world{
-  std::vector<std::shared_ptr<FisicObject>> objetos;
+  std::vector<std::shared_ptr<PhysicObject>> objects;
 
 public:
-  void pushObject(std::shared_ptr<FisicObject> obj);
+  void pushObject(std::shared_ptr<PhysicObject> obj);
 
   void runFrame(float deltaTime);
 
 private:
-  void chequearColision(std::shared_ptr<FisicObject> a,std::shared_ptr<FisicObject> b);
+  void checkColisions(std::shared_ptr<PhysicObject> a,std::shared_ptr<PhysicObject> b);
 };
-
-
-#endif
