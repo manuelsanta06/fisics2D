@@ -3,14 +3,16 @@
 
 #include <vector>
 #include <memory>
+#include "vect2.hpp"
 
 class FisicObject{
 public:
   virtual ~FisicObject()=default;
   virtual void update(float dt)=0;
 
-  float x,y;
-  float velX,velY;
+  vector2<float> pos;
+  vector2<float> vel;
+  vector2<float> rotVel;
   float mas;
 };
 
