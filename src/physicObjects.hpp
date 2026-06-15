@@ -21,6 +21,8 @@ public:
   float angularVel=0.0f;
   float torque=0.0f;
 
+  float restitution=0.8;
+
   float mass=1.0f;
   float invMass=1.0f;
 

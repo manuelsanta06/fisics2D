@@ -43,12 +43,12 @@ void world::resolveCircleCircle(std::shared_ptr<Circle> a,std::shared_ptr<Circle
   float acercVel=(a->vel-b->vel).dot(normal);
   if(acercVel>0)return;
 
-  vector2 j=(-(1+0.8)*acercVel) / (a->invMass+b->invMass) *normal;
+  vector2 j=(-(1+std::max(a->restitution,b->restitution))*acercVel) / (a->invMass+b->invMass) *normal;
   vector2 separation=(minDist-dist)/(a->invMass+b->invMass)*normal;
 
   a->vel+=j*a->invMass;
   b->vel-=j*b->invMass;
 
-  a->pos+=separation*a->invMass;
-  b->pos-=separation*b->invMass;
+  a->pos+=separation*a->invMass*0.8;
+  b->pos-=separation*b->invMass*0.8;
 }

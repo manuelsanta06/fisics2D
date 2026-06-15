@@ -29,16 +29,12 @@ int main(){
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
-  circleHalder.radius=30.0f;
   circleHalder.pos=vector2<float>(400.0f,200.0f);
-  circleHalder.setMass(1.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
-  circleHalder.radius=30.0f;
-  circleHalder.pos=vector2<float>(400.5f,-10000.0f);
-  circleHalder.setMass(1.0f);
+  circleHalder.pos=vector2<float>(400.5f,-1000.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
