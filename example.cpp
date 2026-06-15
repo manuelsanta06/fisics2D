@@ -2,6 +2,7 @@
 #include "src/engine.hpp"
 #include "src/gameObjects.hpp"
 #include "src/physicObjects.hpp"
+#include "src/vect2.hpp"
 #include <memory>
 
 int currentWidth;
@@ -10,8 +11,8 @@ int currentHeight;
 int main(){
   world engine;
 
-  SetConfigFlags(FLAG_WINDOW_RESIZABLE|FLAG_WINDOW_TRANSPARENT);
-  InitWindow(800,600,"balls");
+  SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+  InitWindow(800,800,"balls");
   SetTargetFPS(144);
 
   currentWidth=GetScreenWidth();
@@ -34,13 +35,13 @@ int main(){
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
-  circleHalder.pos=vector2<float>(400.5f,-1000.0f);
+  circleHalder.pos=vector2<float>(400.5f,-3000.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
   circleHalder.radius=10.0f;
-  circleHalder.pos=vector2<float>(400.0f,300.0f);
+  circleHalder.pos=vector2<float>(400.0f,760.0f);
   circleHalder.setMass(0.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
@@ -52,15 +53,18 @@ int main(){
       currentHeight=GetScreenHeight();
     }
 
+    Vector2 screenPos=GetWindowPosition();
+    // Vector2 screenPos={0,0};
+
     engine.runFrame(GetFrameTime());
 
     BeginDrawing();
-    ClearBackground(BLANK); 
+    ClearBackground(RAYWHITE); 
     
     for(auto& entidad:entities){
       if(entidad.physics){
         auto circulo=std::static_pointer_cast<Circle>(entidad.physics);
-        DrawCircle(circulo->pos.x,circulo->pos.y,circulo->radius,MAROON);
+        DrawCircle(circulo->pos.x-screenPos.x,circulo->pos.y-screenPos.y,circulo->radius,MAROON);
       }
     }
 

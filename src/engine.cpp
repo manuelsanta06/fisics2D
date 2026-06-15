@@ -1,6 +1,9 @@
 #include <memory>
+#include <cmath>
 #include "engine.hpp"
+#include "vect2.hpp"
 
+#define AIRF 0.5f
 
 void world::pushObject(std::shared_ptr<PhysicObject> obj){
   objects.push_back(obj);
@@ -12,7 +15,7 @@ void world::runFrame(float deltaTime){
       obj->forceAccumulator+=gravity*obj->mass;
     }
     obj->update(deltaTime);
-    obj->vel*=0.99f;
+    obj->vel*=std::pow(AIRF,deltaTime);
   }
 
   for(size_t i=0;i<objects.size();i++){
