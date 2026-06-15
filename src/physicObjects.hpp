@@ -1,10 +1,17 @@
 #pragma once
 #include "vect2.hpp"
 
+enum class ShapeType{
+  CIRCLE,
+  AABB,
+  POLYGON
+};
+
 class PhysicObject{
 public:
   virtual ~PhysicObject()=default;
   virtual void update(float dt);
+  virtual ShapeType getType()const=0;
 
   vector2<float> pos;
   vector2<float> vel;
@@ -27,5 +34,6 @@ class Circle:public PhysicObject{
 public:
   float radius;
   // void update(float dt)override;
+  ShapeType getType()const override{return ShapeType::CIRCLE;}
 };
 

@@ -89,7 +89,22 @@ struct vector2{
     return std::sqrt(magSq());
   }
 
-  vector2 perp() const{
+  vector2 perp()const{
     return vector2(-y,x);
+  }
+
+  vector2 normalized()const{
+    T m=mag();
+    if(m>0)return vector2(x/m,y/m);
+    return vector2(0,0);
+  }
+
+  vector2& normalize(){
+    T m=mag();
+    if(m>0){
+      x/=m;
+      y/=m;
+    }
+    return *this;
   }
 };
