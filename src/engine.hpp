@@ -16,6 +16,10 @@ public:
   void runFrame(float deltaTime);
 
 private:
-  void colisionsRouter(std::shared_ptr<PhysicObject> a,std::shared_ptr<PhysicObject> b);
-  void resolveCircleCircle(std::shared_ptr<Circle> a,std::shared_ptr<Circle> b);
+  void colisionsRouter(PhysicObject* a,PhysicObject* b);
+
+  void resolveCollision(Circle* a,Circle* b);
+  void resolveCollision(Circle* a,AABB* b);
+  void resolveCollision(AABB* a,Circle* b);
+  void resolveCollision(AABB* a,AABB* b);
 };

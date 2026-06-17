@@ -35,7 +35,19 @@ public:
 class Circle:public PhysicObject{
 public:
   float radius;
-  // void update(float dt)override;
   ShapeType getType()const override{return ShapeType::CIRCLE;}
+};
+
+class AABB:public PhysicObject{
+public:
+  vector2<float> halfExtents;
+  ShapeType getType()const override{return ShapeType::AABB;}
+
+  vector2<float> getMin(){
+    return this->pos-this->halfExtents;
+  }
+  vector2<float> getMax(){
+    return this->pos+this->halfExtents;
+  }
 };
 
