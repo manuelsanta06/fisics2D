@@ -8,10 +8,17 @@
 int currentWidth;
 int currentHeight;
 
+inline Vector2 toRaylib(const vector2<float>& vec){
+  return Vector2{vec.x,vec.y};
+}
+inline vector2<float> fromRaylib(const Vector2& vec){
+  return vector2{vec.x,vec.y};
+}
+
 int main(){
   world engine;
 
-  SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+  SetConfigFlags(FLAG_WINDOW_RESIZABLE|FLAG_FULLSCREEN_MODE);
   InitWindow(800,800,"balls");
   SetTargetFPS(144);
 
@@ -53,8 +60,8 @@ int main(){
       currentHeight=GetScreenHeight();
     }
 
-    Vector2 screenPos=GetWindowPosition();
-    // Vector2 screenPos={0,0};
+    vector2 screenPos=fromRaylib(GetWindowPosition());
+    // vector2 screenPos={0,0};
 
     engine.runFrame(GetFrameTime());
 
@@ -63,8 +70,13 @@ int main(){
     
     for(auto& entidad:entities){
       if(entidad.physics){
-        auto circulo=std::static_pointer_cast<Circle>(entidad.physics);
-        DrawCircle(circulo->pos.x-screenPos.x,circulo->pos.y-screenPos.y,circulo->radius,MAROON);
+        if(entidad.physics->getType()==ShapeType::CIRCLE){
+          auto circulo=std::static_pointer_cast<Circle>(entidad.physics);
+          DrawCircleV(toRaylib(circulo->pos-screenPos),circulo->radius,MAROON);
+        }if(entidad.physics->getType()==ShapeType::AABB){
+          auto aabb=std::static_pointer_cast<AABB>(entidad.physics);
+          DrawRectangleV(toRaylib(aabb->getMin()-screenPos),toRaylib(aabb->halfExtents*2),BLACK);
+        }
       }
     }
 
