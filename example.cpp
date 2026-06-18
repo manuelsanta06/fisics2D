@@ -27,34 +27,58 @@ int main(){
 
   std::vector<GameObject> entities;
 
+  vector2<float> screenSize={(float)GetScreenWidth(),(float)GetScreenHeight()};
+
   GameObject gameHandler;
   Circle circleHalder;
   AABB AABBHandler;
 
+  circleHalder.restitution=1;
+  AABBHandler.halfExtents={20.0f,screenSize.y};
+  AABBHandler.pos={0,0};
+  AABBHandler.setMass(0.0f);
+  gameHandler.physics=std::make_shared<AABB>(AABBHandler);
+  entities.push_back(gameHandler);
+  engine.pushObject(gameHandler.physics);
+
+  AABBHandler.halfExtents={20.0f,screenSize.y};
+  AABBHandler.pos={screenSize.x-5,0};
+  gameHandler.physics=std::make_shared<AABB>(AABBHandler);
+  entities.push_back(gameHandler);
+  engine.pushObject(gameHandler.physics);
+
+  AABBHandler.halfExtents={screenSize.x,20.0f};
+  AABBHandler.pos={0.0f,screenSize.y};
+  gameHandler.physics=std::make_shared<AABB>(AABBHandler);
+  entities.push_back(gameHandler);
+  engine.pushObject(gameHandler.physics);
+
+
+  circleHalder.restitution=0.8;
   AABBHandler.halfExtents={30.0f,30.0f};
-  AABBHandler.pos=vector2<float>(650.0f,100.0f);
+  AABBHandler.pos={600.0f,100.0f};
   AABBHandler.setMass(1.0f);
   gameHandler.physics=std::make_shared<AABB>(AABBHandler);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
-  AABBHandler.pos=vector2<float>(650.0f,200.0f);
+  AABBHandler.pos={600.0f,200.0f};
   gameHandler.physics=std::make_shared<AABB>(AABBHandler);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
-  AABBHandler.pos=vector2<float>(680.0f,-3000.0f);
+  AABBHandler.pos={630.0f,-3000.0f};
   gameHandler.physics=std::make_shared<AABB>(AABBHandler);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
-  AABBHandler.pos=vector2<float>(710.0f,-3100.0f);
+  AABBHandler.pos={660.0f,-3100.0f};
   gameHandler.physics=std::make_shared<AABB>(AABBHandler);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
   AABBHandler.halfExtents={10.0f,10.0f};
-  AABBHandler.pos=vector2<float>(650.0f,760.0f);
+  AABBHandler.pos={600.0f,760.0f};
   AABBHandler.setMass(0.0f);
   gameHandler.physics=std::make_shared<AABB>(AABBHandler);
   entities.push_back(gameHandler);
@@ -63,26 +87,26 @@ int main(){
 
 
   circleHalder.radius=30.0f;
-  circleHalder.restitution=1;
-  circleHalder.pos=vector2<float>(400.5f,-3000.0f);
+  circleHalder.restitution=0.9;
+  circleHalder.pos={400.5f,-3000.0f};
   circleHalder.setMass(1.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
   circleHalder.restitution=0.8;
-  circleHalder.pos=vector2<float>(400.0f,200.0f);
+  circleHalder.pos={400.0f,200.0f};
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
-  circleHalder.pos=vector2<float>(400.0f,100.0f);
+  circleHalder.pos={400.0f,100.0f};
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
   circleHalder.radius=10.0f;
-  circleHalder.pos=vector2<float>(400.0f,760.0f);
+  circleHalder.pos={400.0f,760.0f};
   circleHalder.setMass(0.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
@@ -92,6 +116,13 @@ int main(){
     if(IsWindowResized()){
       currentWidth=GetScreenWidth();
       currentHeight=GetScreenHeight();
+    }if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+      circleHalder.radius=20.0f;
+      circleHalder.setMass(1.0f);
+      circleHalder.pos=fromRaylib(GetMousePosition());
+      gameHandler.physics=std::make_shared<Circle>(circleHalder);
+      entities.push_back(gameHandler);
+      engine.pushObject(gameHandler.physics);
     }
 
     vector2 screenPos=fromRaylib(GetWindowPosition());
@@ -114,7 +145,9 @@ int main(){
       }
     }
 
-    DrawText(TextFormat("Resolucion: %ix%i. FPS: %i",currentWidth,currentHeight,GetFPS()),10,10,18,BLACK);
+    DrawText(TextFormat("Resolucion: %ix%i\nFPS: %i\nentidades: %i",
+      currentWidth,currentHeight,GetFPS(),entities.size()),
+      10,10,18,BLACK);
     DrawLine(currentWidth/2,0,currentWidth/2,currentHeight,LIGHTGRAY);
     DrawLine(0,currentHeight/2,currentWidth,currentHeight/2,LIGHTGRAY);
     EndDrawing();
