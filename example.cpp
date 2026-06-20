@@ -20,7 +20,7 @@ int main(){
 
   SetConfigFlags(FLAG_WINDOW_RESIZABLE|FLAG_FULLSCREEN_MODE);
   InitWindow(800,800,"balls");
-  SetTargetFPS(144);
+  // SetTargetFPS(144);
 
   currentWidth=GetScreenWidth();
   currentHeight=GetScreenHeight();
@@ -117,7 +117,7 @@ int main(){
       currentWidth=GetScreenWidth();
       currentHeight=GetScreenHeight();
     }if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-      circleHalder.radius=20.0f;
+      circleHalder.radius=5.0f;
       circleHalder.setMass(1.0f);
       circleHalder.pos=fromRaylib(GetMousePosition());
       gameHandler.physics=std::make_shared<Circle>(circleHalder);

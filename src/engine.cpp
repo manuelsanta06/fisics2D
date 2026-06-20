@@ -23,12 +23,27 @@ void world::runFrame(float deltaTime){
 
   for(size_t i=0;i<objects.size();i++){
     for(size_t j=i+1;j<objects.size();j++){
-      colisionsRouter(objects[i].get(),objects[j].get());
+      collisionsRouter(objects[i].get(),objects[j].get());
     }
   }
 }
 
-void world::colisionsRouter(PhysicObject* a,PhysicObject* b){
+void world::applyCollision(PhysicObject* a,PhysicObject* b,float penetration,vector2<float> normal){
+  float relVel=(a->vel-b->vel).dot(normal);
+  if(relVel>0)return;
+  float totalInvMass=(a->invMass+b->invMass);
+
+  vector2<float> impulse=(-(1+std::max(a->restitution,b->restitution))*relVel) /totalInvMass  *normal;
+  vector2<float> separation=(penetration*BAUMGARTE)/totalInvMass *normal;
+
+  a->vel+=impulse*a->invMass;
+  b->vel-=impulse*b->invMass;
+
+  a->pos+=separation*a->invMass;
+  b->pos-=separation*b->invMass;
+}
+
+void world::collisionsRouter(PhysicObject* a,PhysicObject* b){
   if(a->invMass<=0&&b->invMass<=0)return;
 
   ShapeType typeA=a->getType();
@@ -52,17 +67,7 @@ void world::resolveCollision(Circle* a,Circle* b){
   float minDist=a->radius+b->radius;
   if(dist>minDist)return;
 
-  float relVel=(a->vel-b->vel).dot(normal);
-  if(relVel>0)return;
-
-  vector2 j=(-(1+std::max(a->restitution,b->restitution))*relVel) / (a->invMass+b->invMass) *normal;
-  vector2 separation=(minDist-dist)/(a->invMass+b->invMass)*normal*BAUMGARTE;
-
-  a->vel+=j*a->invMass;
-  b->vel-=j*b->invMass;
-
-  a->pos+=separation*a->invMass;
-  b->pos-=separation*b->invMass;
+  applyCollision(a,b,(minDist-dist),normal);
 }
 
 void world::resolveCollision(Circle* a,AABB* b){
@@ -101,17 +106,7 @@ void world::resolveCollision(Circle* a,AABB* b){
     penetration=a->radius+minDistToEdge;
   }
 
-  float relVel=(a->vel-b->vel).dot(normal);
-  if(relVel>0)return;
-
-  vector2<float> j=(-(1+std::max(a->restitution,b->restitution))*relVel) / (a->invMass+b->invMass) *normal;
-  vector2<float> separation=(penetration*BAUMGARTE)/(a->invMass+b->invMass) *normal;
-
-  a->vel+=j*a->invMass;
-  b->vel-=j*b->invMass;
-
-  a->pos+=separation*a->invMass;
-  b->pos-=separation*b->invMass;
+  applyCollision(a,b,penetration,normal);
 }
 void world::resolveCollision(AABB* a,Circle* b){
   return resolveCollision(b,a);
@@ -133,16 +128,5 @@ void world::resolveCollision(AABB* a,AABB* b){
     normal.y=dist.y>=0?1.0f:-1.0f;
     penetration=overlap.y;
   }
-
-  float relVel=(a->vel-b->vel).dot(normal);
-  if(relVel>0)return;
-
-  vector2<float> j=(-(1+std::max(a->restitution,b->restitution))*relVel) / (a->invMass+b->invMass) *normal;
-  vector2<float> separation=(penetration)*BAUMGARTE/(a->invMass+b->invMass)*normal;
-
-  a->vel+=j*a->invMass;
-  b->vel-=j*b->invMass;
-
-  a->pos+=separation*a->invMass;
-  b->pos-=separation*b->invMass;
+  applyCollision(a,b,penetration,normal);
 }

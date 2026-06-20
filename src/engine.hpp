@@ -16,7 +16,9 @@ public:
   void runFrame(float deltaTime);
 
 private:
-  void colisionsRouter(PhysicObject* a,PhysicObject* b);
+  void applyCollision(PhysicObject* a,PhysicObject* b,float penetration,vector2<float> normal);
+
+  void collisionsRouter(PhysicObject* a,PhysicObject* b);
 
   void resolveCollision(Circle* a,Circle* b);
   void resolveCollision(Circle* a,AABB* b);
