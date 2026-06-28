@@ -80,6 +80,9 @@ struct vector2{
   T dot(const vector2& other)const{
     return x*other.x+y*other.y;
   }
+  T cross(const vector2& other)const{
+    return (x*other.y)-(y*other.x);
+  }
 
   T magSq()const{
     return x*x+y*y;
