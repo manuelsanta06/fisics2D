@@ -6,6 +6,9 @@
 #include "physicObjects.hpp"
 
 const vector2<float> gravity(0.0f,980.0f);
+constexpr float DAMPING=0.5f;
+constexpr float SLOP=0.02f;
+constexpr float BAUMGARTE=0.8;
 
 class world{
   std::vector<std::shared_ptr<PhysicObject>> objects;

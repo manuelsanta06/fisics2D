@@ -96,11 +96,13 @@ int main(){
 
   circleHalder.restitution=0.8;
   circleHalder.pos={400.0f,200.0f};
+  circleHalder.setMass(10.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
 
   circleHalder.pos={400.0f,100.0f};
+  circleHalder.setMass(1.0f);
   gameHandler.physics=std::make_shared<Circle>(circleHalder);
   entities.push_back(gameHandler);
   engine.pushObject(gameHandler.physics);
@@ -117,7 +119,7 @@ int main(){
       currentWidth=GetScreenWidth();
       currentHeight=GetScreenHeight();
     }if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-      circleHalder.radius=5.0f;
+      circleHalder.radius=20.0f;
       circleHalder.setMass(1.0f);
       circleHalder.pos=fromRaylib(GetMousePosition());
       gameHandler.physics=std::make_shared<Circle>(circleHalder);

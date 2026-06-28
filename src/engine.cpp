@@ -4,23 +4,21 @@
 #include "engine.hpp"
 #include "vect2.hpp"
 
-constexpr float AIRF=0.5f;
-constexpr float SLOP=0.02f;
-constexpr float BAUMGARTE=0.8;
-
 void world::pushObject(std::shared_ptr<PhysicObject> obj){
   objects.push_back(obj);
 }
 
 void world::runFrame(float deltaTime){
+  float dampingFactor=std::max(0.0f,1.0f-(DAMPING*deltaTime));
   for (auto& obj:objects){
     if(obj->invMass>0.0f){
       obj->forceAccumulator+=gravity*obj->mass;
     }
     obj->update(deltaTime);
-    obj->vel*=std::pow(AIRF,deltaTime);
+    obj->vel*=dampingFactor;
   }
 
+  // for(int i=0;i<10;i++)
   for(size_t i=0;i<objects.size();i++){
     for(size_t j=i+1;j<objects.size();j++){
       collisionsRouter(objects[i].get(),objects[j].get());
@@ -34,7 +32,7 @@ void world::applyCollision(PhysicObject* a,PhysicObject* b,float penetration,vec
   float totalInvMass=(a->invMass+b->invMass);
 
   vector2<float> impulse=(-(1+std::max(a->restitution,b->restitution))*relVel) /totalInvMass  *normal;
-  vector2<float> separation=(penetration*BAUMGARTE)/totalInvMass *normal;
+  vector2<float> separation=(std::max(penetration-SLOP,0.0f)*BAUMGARTE)/totalInvMass *normal;
 
   a->vel+=impulse*a->invMass;
   b->vel-=impulse*b->invMass;
